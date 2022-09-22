@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+    crossorigin="anonymous"></script>
+    
+
+  <!-- JS  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <!-- cookie is not a function 해결-->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- google 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+  <!-- Talewind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.11/tailwind.min.css'>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.3.2/cdn.js'></script>
+  <title>WEEK0 4조 | 기온별옷차림</title>
+
+  <style>
+    * {
+      font-family: 'Jua', sans-serif;
+    }
+
+    .wrap {
+      width: 900px;
+      margin: 10px auto;
+    }
+  </style>
+
+  <script>
+    function login() {
+      $.ajax({
+        type: "POST",
+        url: "/api/login",
+        data: {
+          'id_give': $('#input-id').val(),
+          'pw_give': $('#input-pw').val()
+        },
+        success: function (response) {
+          if (response["result"] == "success") {
+            // 토큰을 쿠키에 담아 보낸다.
+            $.cookie('mytoken', response['token'], {path: '/'});
+            alert(response['msg'])
+            window.location.replace("/main")
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+
+    function join(){
+      window.location.replace("/join")
+    }
+
+    function postcard() {
+            let text = $("#input-text").val();
+            console.log(text)
+
+            $.ajax({
+                type: "POST",
+                url: "/post",
+                data: { text_give: text,
+                like_give: like,
+               id_give},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('포스팅 완료!');
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+
+            })
+        }
+
+
+
+  </script>
+</head>
+
+<body>
+  
+<div class="antialiased flex items-center">
+  <div class="w-full max-w-sm mx-auto">
+    <div class="bg-white shadow rounded-lg p-5 bg-indigo-700 w-full"
+    x-data="{
+      weatherData: null,
+      fetchWeatherData() {
+        fetch('https://api.weatherapi.com/v1/forecast.json?key=ff9b41622f994b1287a73535210809&q=Guwahati&days=3')
+          .then(response => response.json())
+          .then(json => this.weatherData = json)
+      },
+      formattedDateDisplay(date) {
+        const options = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+         };
+         
+         return (new Date(date)).toLocaleDateString('en-US', options);
+      }
+    }"
+    x-init="fetchWeatherData()"
+    x-cloak
+  >
+    <h2 class="font-bold text-white text-lg dark:text-white" x-text="formattedDateDisplay(new Date())"></h2>
+    
+    <template x-if="weatherData != null">
+      <div>
+        <div class="flex mt-4 mb-2">
+          <div class="flex-1">
+            <div class="text-3xl font-bold text-white dark:text-white">현재 온도 : {{temp1}}&deg;C </div>
+            <div class="text-1xl font-bold text-white dark:text-white">체감 온도 : {{temp2}}&deg;C </div>
+          </div>
+          
+        </div>
+  
+        <div class="flex space-x-2 justify-between border-t dark:border-gray-500" >
+            <div class="flex-1 text-center pt-3" :class="{'border-r dark:border-gray-500': key==0}">
+              <div class="font-semibold text-white mt-1.5 dark:text-white">습도 : {{temp3}}</div>
+              <div class="font-semibold text-white mt-1.5 dark:text-white">풍향 : {{temp4}}</div>
+            </div>
+        </template>
+        </div>
+      </div>
+    
+  </div>
+    
+
+  <div class="flex min-h-screen bg-white">
+
+
+<div class="md:w-1/2 max-w-lg mx-auto my-4 px-4 py-5 shadow-none">
+       
+  <!-- <div class="flex w-full justify-center items-center bg-white space-y-8"></div> -->
+  <!-- <div class="w-full px-8 md:px-32 lg:px-24"> -->
+    <form class="bg-white rounded-md p-5">
+      <h1 class="text-gray-800 font-bold text-2xl mb-1">반갑습니다!</h1>
+      <p class="text-sm font-normal text-gray-600 mb-8">오늘의 기온에 맞는 옷을 추천해드릴게요!</p>
+      <div class="flex items-center border-2 mb-8 py-2 px-3 rounded-2xl">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path d="M20.822 18.096c-3.439-.794-6.64-1.49-5.09-4.418 4.72-8.912 1.251-13.678-3.732-13.678-5.082 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-3.073.71-3.188 2.236-3.178 4.904l.004 1h23.99l.004-.969c.012-2.688-.092-4.222-3.176-4.935z"/>
+        </svg>
+        <input id="input-id" class=" pl-2 w-full outline-none border-none" type="text" name="ID" placeholder="ID" />
+      </div>
+      <div class="flex items-center border-2 mb-12 py-2 px-3 rounded-2xl ">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+          fill="currentColor">
+           <path d="m18.75 9h-.75v-3c0-3.309-2.691-6-6-6s-6 2.691-6 6v3h-.75c-1.24 0-2.25 1.009-2.25 2.25v10.5c0 1.241 1.01 2.25 2.25 2.25h13.5c1.24 0 2.25-1.009 2.25-2.25v-10.5c0-1.241-1.01-2.25-2.25-2.25zm-10.75-3c0-2.206 1.794-4 4-4s4 1.794 4 4v3h-8zm5 10.722v2.278c0 .552-.447 1-1 1s-1-.448-1-1v-2.278c-.595-.347-1-.985-1-1.722 0-1.103.897-2 2-2s2 .897 2 2c0 .737-.405 1.375-1 1.722z"/>
+        </svg>
+        <input id="input-pw" class="pl-2 w-full outline-none border-none" type="password" name="password"
+          placeholder="Password" />
+
+      </div>
+      <input type="button" onclick="login()" value="로그인"
+        class="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
+      <div class="flex justify-between mt-4">
+        
+        <input type="button" onclick="join()" value="회원가입"
+          class="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
+      </div>
+
+    </form>
+  </div>
+
+</div>
+</div>
+    
+  </div>
+</div>
+
+
+  
+</body>
+
+</html>

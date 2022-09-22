@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <!-- google 폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Talewind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>기온별옷차림 | 회원가입</title>
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+
+    <script>
+       function signUp(){
+            $.ajax({
+                type: "POST",
+                url: "/api/signup",
+                data: { 'id_give': $('#input-id').val(),
+                        'pw_give': $('#input-pw').val(),
+                        'email_give': $('#input-email').val()
+                    },
+                success: function (response) { 
+                    if (response["result"] == "success") {
+                            alert(response['msg']);
+                            window.location.replace("/")
+                        } else {
+                            alert(response['msg']);
+                }}
+            })
+        }
+
+    </script>
+</head>
+
+<body class="bg-white">
+    <div class="flex min-h-screen bg-white">
+
+
+        <div class="md:w-1/2 max-w-lg mx-auto my-4 px-4 py-5 shadow-none">
+
+            <div class="text-left p-0 font-sans">
+                
+                <h1 class=" text-gray-800 text-3xl font-medium">계정 만들기</h1>
+                <h3 class="p-1 text-gray-700">아이디와 비밀번호, 이메일을 입력하세요.</h3>
+            </div>
+            <form action="#" class="p-0">
+                
+                <div class="mt-5">
+                    <input type="text" id="input-id" class="block w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent " placeholder="ID">
+                </div>
+                <div class="mt-5">
+                    <input type="password" id="input-pw" class="block w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent  " placeholder="Password">
+                </div>
+                <div class="mt-5">
+
+                    <!-- <label for="email" class="sc-bqyKva ePvcBv">Email</label> -->
+                    <input type="text" id="input-email" class="block w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent " placeholder="Email">
+                </div>
+
+                <div class="mt-10">
+                    <input type="button" onclick="signUp()" value="가입하기" class="py-3 bg-green-500 text-white w-full rounded hover:bg-green-600">
+                </div>
+
+            </form>
+            <a class="" href="/" data-test="Link"><span class="block  p-5 text-center text-gray-800  text-xs ">Already have an account?</span></a>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+    </html>
